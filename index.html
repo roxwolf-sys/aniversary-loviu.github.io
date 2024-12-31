@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corazón 3D Interactivo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="heart-container">
+      <div class="heart-front">
+        <div class="diamond"></div>
+        <div class="circle left"></div>
+        <div class="circle right"></div>
+        <div class="image-container">
+          <img src="hola.png" alt="Profile Image" />
+        </div>
+      </div>
+      <div class="heart-back">
+        <div class="diamond"></div>
+        <div class="circle left"></div>
+        <div class="circle right"></div>
+        <div class="text-inside-back">
+          ¡Feliz aniversario!<br />
+          <br />RAWR!<br />
+          <br />Loviu, muack<br />
+        </div>
+      </div>
+    </div>
+    <audio id="bgMusic" loop>
+      <source src="Es Verdad.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="alternateMusic" loop>
+      <source src="Compartir.mp3" type="audio/mpeg" />
+    </audio>
+    <script src="script.js"></script>
+  </body>
+</html>
