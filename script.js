@@ -61,26 +61,27 @@ document.addEventListener("touchend", dragEnd);
 let clickCount = 0;
 let clickTimer = null;
 let isFirstClick = true;
-let isSecondSongPlaying = false;
 const CLICK_THRESHOLD = 8;
 const CLICK_TIMEOUT = 2000;
 
 const audioTracks = {
     main: {
         element: document.getElementById('bgMusic'),
-        src: 'tu-primer-audio.mp3'
+        src: 'Es Verdad.mp3'
     },
     alternate: {
         element: document.getElementById('alternateMusic'),
-        src: 'tu-segundo-audio.mp3'
+        src: 'Compartir.mp3'
     }
 };
+
+let currentTrack = 'main';
 
 function handleClick() {
     // Reproducir primera canción con un click
     if (isFirstClick) {
-        audioTracks.main.element.volume = 0.5;
-        audioTracks.alternate.element.volume = 0.5;
+        audioTracks.main.element.volume = 1.0;
+        audioTracks.alternate.element.volume = 1.0;
         audioTracks.main.element.play().catch(function(error) {
             console.log("Error al reproducir el audio:", error);
         });
@@ -88,31 +89,36 @@ function handleClick() {
         return;
     }
 
-    // Solo contar clicks si aún no está sonando la segunda canción
-    if (!isSecondSongPlaying) {
-        clickCount++;
+    clickCount++;
+    
+    clearTimeout(clickTimer);
+    
+    clickTimer = setTimeout(() => {
+        clickCount = 0;
+    }, CLICK_TIMEOUT);
+    
+    // Cambiar entre canciones cada 8 clicks
+    if (clickCount >= CLICK_THRESHOLD) {
+        // Pausar la canción actual
+        audioTracks[currentTrack].element.pause();
+        audioTracks[currentTrack].element.currentTime = 0;
         
+        // Cambiar a la otra canción
+        currentTrack = currentTrack === 'main' ? 'alternate' : 'main';
+        
+        // Reproducir la nueva canción
+        audioTracks[currentTrack].element.play().catch(function(error) {
+            console.log("Error al cambiar el audio:", error);
+        });
+        
+        clickCount = 0;
         clearTimeout(clickTimer);
-        
-        clickTimer = setTimeout(() => {
-            clickCount = 0;
-        }, CLICK_TIMEOUT);
-        
-        // Cambiar a la segunda canción si se alcanzaron los 8 clicks
-        if (clickCount >= CLICK_THRESHOLD) {
-            audioTracks.main.element.pause();
-            audioTracks.main.element.currentTime = 0;
-            
-            audioTracks.alternate.element.play().catch(function(error) {
-                console.log("Error al cambiar el audio:", error);
-            });
-            
-            isSecondSongPlaying = true;
-            clickCount = 0;
-            clearTimeout(clickTimer);
-        }
     }
 }
+
+// Agregar eventos de click/touch
+document.addEventListener('click', handleClick);
+document.addEventListener('touchstart', handleClick);
 
 // Agregar eventos de click/touch
 document.addEventListener('click', handleClick);
