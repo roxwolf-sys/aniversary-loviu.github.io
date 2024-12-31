@@ -67,21 +67,24 @@ const CLICK_TIMEOUT = 2000;
 const audioTracks = {
     main: {
         element: document.getElementById('bgMusic'),
-        src: 'Es Verdad.mp3'
+        src: 'tu-primer-audio.mp3'
     },
     alternate: {
         element: document.getElementById('alternateMusic'),
-        src: 'Compartir.mp3'
+        src: 'tu-segundo-audio.mp3'
     }
 };
 
 let currentTrack = 'main';
 
-function handleClick() {
-    // Reproducir primera canción con un click
+function handleInteraction(event) {
+    // Prevenir que el evento se dispare dos veces
+    event.preventDefault();
+    
+    // Reproducir primera canción con la primera interacción
     if (isFirstClick) {
-        audioTracks.main.element.volume = 1.0;
-        audioTracks.alternate.element.volume = 1.0;
+        audioTracks.main.element.volume = 0.5;
+        audioTracks.alternate.element.volume = 0.5;
         audioTracks.main.element.play().catch(function(error) {
             console.log("Error al reproducir el audio:", error);
         });
@@ -97,7 +100,7 @@ function handleClick() {
         clickCount = 0;
     }, CLICK_TIMEOUT);
     
-    // Cambiar entre canciones cada 8 clicks
+    // Cambiar entre canciones cada 8 interacciones
     if (clickCount >= CLICK_THRESHOLD) {
         // Pausar la canción actual
         audioTracks[currentTrack].element.pause();
@@ -116,10 +119,6 @@ function handleClick() {
     }
 }
 
-// Agregar eventos de click/touch
-document.addEventListener('click', handleClick);
-document.addEventListener('touchstart', handleClick);
-
-// Agregar eventos de click/touch
-document.addEventListener('click', handleClick);
-document.addEventListener('touchstart', handleClick);
+// Agregar eventos para clicks y toques
+document.addEventListener('click', handleInteraction);
+document.addEventListener('touchstart', handleInteraction, { passive: false });
